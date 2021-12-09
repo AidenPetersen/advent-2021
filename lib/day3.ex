@@ -18,7 +18,54 @@ defmodule Day3 do
     gamma * epsilon
   end
 
-  def bitstr_to_integer x do
+  def part2 do
+    input = get_input("data/day3p2.txt")
+
+    o2(input, 0) * co2(input, 0)
+  end
+
+
+  defp o2(arr, idx) do
+    if length(arr) <= 1 do
+      arr
+      |> Enum.at(0)
+      |> bitstr_to_integer
+    else
+      bits = arr
+      |> Enum.map(&(Enum.at(&1, idx)))
+      |> Enum.frequencies()
+
+      bit =  if bits[1] >= bits[0] do 1 else 0 end
+
+      modified = arr
+      |> Enum.filter(&(Enum.at(&1, idx) == bit))
+
+      o2(modified, idx + 1)
+    end
+  end
+
+
+  defp co2(arr, idx) do
+    if length(arr) <= 1 do
+      arr
+      |> Enum.at(0)
+      |> bitstr_to_integer
+    else
+      bits = arr
+      |> Enum.map(&(Enum.at(&1, idx)))
+      |> Enum.frequencies()
+
+      bit =  if bits[1] < bits[0] do 1 else 0 end
+
+      modified = arr
+      |> Enum.filter(&(Enum.at(&1, idx) == bit))
+
+      co2(modified, idx + 1)
+    end
+  end
+
+
+  defp bitstr_to_integer x do
     x
     |> Enum.map(&Integer.to_string &1)
     |> Enum.join
